@@ -14,6 +14,10 @@ let submit=document.createElement('button');
 
 unorderdList.appendChild(submit);
 submit.textContent='Show The Result';
+let imgarr=[];
+let voitarr=[];
+let displayarr=[];
+let inlinearr=[];
   
 
 function Busmall (name,source){
@@ -22,6 +26,7 @@ function Busmall (name,source){
     this.votes=0;
     this.desiply=0;
     arrOfImg.push(this);
+    imgarr.push(this.name)
 }
 new Busmall('bag','img/bag.jpg')
 new Busmall('banana','img/banana.jpg')
@@ -46,33 +51,53 @@ new Busmall('wine-glass','img/wine-glass.jpg')
 function renderRandomThreeImg(){
    firImgeIndex=genaretRandomIndex();
    secImgeIndex=genaretRandomIndex();
- therImgeindex=genaretRandomIndex();
-    while(firImgeIndex === secImgeIndex || firstImge === therImgeindex || secImgeIndex===therImgeindex){
-    firImgeIndex=genaretRandomIndex();
-    secImgeIndex=genaretRandomIndex();
+   therImgeindex=genaretRandomIndex();
+
+
+    while (firImgeIndex === secImgeIndex || firImgeIndex === therImgeindex || secImgeIndex === therImgeindex){
+      
+        console.log('hello')
+    
+   firImgeIndex=genaretRandomIndex();
+   secImgeIndex=genaretRandomIndex();
+  
     }
 
+inlinearr[0]=firImgeIndex
+inlinearr[1]=secImgeIndex
+inlinearr[2]=therImgeindex
+
+    
     firstImge.setAttribute('src', arrOfImg[firImgeIndex].source); 
     secendImge.setAttribute('src', arrOfImg[secImgeIndex].source);
     therdImge.setAttribute('src',arrOfImg[therImgeindex].source);
-}
-genaretRandomIndex();
-renderRandomThreeImg();
+
+    }
+// console.log(inlinearr)
+// genaretRandomIndex();
+// renderRandomThreeImg();
 
 
   function genaretRandomIndex(){
       let randomIndex = Math.floor(Math.random()*arrOfImg.length)
+      while(inlinearr.includes(randomIndex)){
+        randomIndex = Math.floor(Math.random()*arrOfImg.length)
+      }
       return randomIndex
+
       
   }
+  console.log(inlinearr)
+genaretRandomIndex();
+renderRandomThreeImg();
  
-
-  imge1.addEventListener('click', handleClicking)
-  imge2.addEventListener('click', handleClicking)
-  imge3.addEventListener('click', handleClicking)
-
-  unorderdList.addEventListener('click',handleClicking)
   
+  imges.addEventListener('click', handleClicking)
+//   imge2.addEventListener('click', handleClicking)
+//   imge3.addEventListener('click', handleClicking)
+
+
+
 function  handleClicking(event){
     attempts++
     if(attempts<=numberOfclik){
@@ -96,11 +121,14 @@ function  handleClicking(event){
             arrOfImg[therImgeindex].desiply++
         }
         renderRandomThreeImg();
+        submit.addEventListener('click',showresult)
     }
+}
   
-
-    else{
-        unorderdList.addEventListener('click',showresult)
+  
+    
+        // submit.addEventListener('click',showresult)
+      
         function showresult(event){
     let li;
     for(let i = 0 ; i < arrOfImg.length; i++){
@@ -109,20 +137,48 @@ function  handleClicking(event){
       li.textContent = `${arrOfImg[i].name} it has ${arrOfImg[i].votes} Votes. and has seen ${arrOfImg[i].desiply} times`
      
     } 
-  
- 
+   
+    submit.removeEventListener('click',showresult)
+    for(let j = 0; j<arrOfImg.length ;j++){
+voitarr.push(arrOfImg[j].votes)
+displayarr.push(arrOfImg[j].desiply)  }
+
+chartrender();
 }
-unorderdList.removeEventListener('click', handleClicking)
+
+
     imge1.removeEventListener('click', handleClicking);
     imge2.removeEventListener('click', handleClicking);    
     imge3.removeEventListener('click', handleClicking);
-   
+
+    
   
-}
+
+    
+function chartrender(){
+    var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'bar',
+
+    // The data for our dataset
+    data: {
+        labels: imgarr ,
+        datasets: [{
+            label: 'custome choeis chart',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: voitarr,
+        },{
+            label: 'product display',
+            backgroundColor: 'rgb(170, 150, 200)',
+            borderColor: 'rgb(170, 150, 200)',
+            data: displayarr,
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
 
 }
-
-
-renderRandomThreeImg();
-genaretRandomIndex();
-
