@@ -1,7 +1,7 @@
 'use strict';
 let numberOfclik=25;
 let attempts=0;
-let arrOfImg=[]
+let arrOfImg=[];
 let firstImge =document.getElementById('imge1')
 let secendImge =document.getElementById('imge2')
 let therdImge =document.getElementById('imge3')
@@ -120,8 +120,10 @@ function  handleClicking(event){
             arrOfImg[secImgeIndex].desiply++
             arrOfImg[therImgeindex].desiply++
         }
+        cusVoite();
         renderRandomThreeImg();
         submit.addEventListener('click',showresult)
+       
     }
 }
   
@@ -130,29 +132,60 @@ function  handleClicking(event){
         // submit.addEventListener('click',showresult)
       
         function showresult(event){
+            if(attempts>=25){
     let li;
+    
     for(let i = 0 ; i < arrOfImg.length; i++){
         li = document.createElement('li');
         unorderdList.appendChild(li);                                  
       li.textContent = `${arrOfImg[i].name} it has ${arrOfImg[i].votes} Votes. and has seen ${arrOfImg[i].desiply} times`
      
     } 
-   
+    
+    
     submit.removeEventListener('click',showresult)
     for(let j = 0; j<arrOfImg.length ;j++){
 voitarr.push(arrOfImg[j].votes)
 displayarr.push(arrOfImg[j].desiply)  }
 
-chartrender();
+
 }
+
+// else{
+
+//     li = document.createElement('li');
+//     unorderdList.appendChild(li);                                  
+//   li.textContent = `${arrOfImg[i].name} it has ${arrOfImg[i].votes} Votes.`
+// }
+chartrender();
+renderRandomThreeImg();
+
+        }
 
 
     imge1.removeEventListener('click', handleClicking);
     imge2.removeEventListener('click', handleClicking);    
     imge3.removeEventListener('click', handleClicking);
 
-    
-  
+    function cusVoite(){
+  let numOfviots = JSON.stringify(arrOfImg);
+  localStorage.setItem('votes', numOfviots);
+
+    }
+    let prevVoit
+function saveVotes(){
+    let savedvoit=localStorage.getItem('votes')
+     prevVoit= JSON.parse(savedvoit)
+   if(prevVoit){
+       arrOfImg=prevVoit
+
+   }
+
+ 
+}
+saveVotes();
+
+// }
 
     
 function chartrender(){
